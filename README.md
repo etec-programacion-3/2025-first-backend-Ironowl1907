@@ -1,7 +1,7 @@
 # Proyecto Backend - Sistema de Gestión de Biblioteca
 
 ## Información del Alumno
-- Nombre y Apellido: [Completar]
+- Nombre y Apellido: Facundo Guinazu
 - Curso: 5to Año
 - Especialidad: Informática
 
@@ -179,4 +179,3 @@ GET    /prestamos/vencidos  # Listar préstamos vencidos
 3. Archivo requests.http con ejemplos de uso
 4. Diagrama de la base de datos
 5. Presentación del proyecto
-
