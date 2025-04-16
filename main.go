@@ -1,7 +1,16 @@
 package main
 
-import "fmt"
+import (
+	"net/http"
+
+	routes "github.com/etec-programacion-3/2025-first-backend-Ironowl1907/routes"
+	"github.com/gorilla/mux"
+)
 
 func main() {
-	fmt.Println("Hello world!")
+	g_Router := mux.NewRouter()
+
+	g_Router.HandleFunc("/", routes.HomeHadler)
+
+	http.ListenAndServe(":8080", g_Router)
 }
