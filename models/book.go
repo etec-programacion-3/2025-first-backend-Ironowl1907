@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type User struct {
+type Books struct {
 	gorm.Model
 
 	Title         string `gorm:"not null; unique_index"`
