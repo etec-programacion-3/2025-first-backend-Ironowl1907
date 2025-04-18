@@ -11,7 +11,7 @@ import (
 
 func main() {
 	db.DBConnection()
-	db.DB.AutoMigrate(models.Books{})
+	db.DB.AutoMigrate(models.Book{})
 
 	g_Router := mux.NewRouter()
 
