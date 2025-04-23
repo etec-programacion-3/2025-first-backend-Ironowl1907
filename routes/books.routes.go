@@ -49,7 +49,19 @@ func PutBookHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteBookHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("DeleteBookHandler"))
+	var book models.Book
+	params := mux.Vars(r)
+	db.DB.First(&book, params["id"])
+
+	if book.ID == 0 {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("User Not found"))
+		return
+	}
+
+	db.DB.Delete(&book)
+	w.WriteHeader(http.StatusOK)
+
 }
 
 func GetSearchBookHandler(w http.ResponseWriter, r *http.Request) {
