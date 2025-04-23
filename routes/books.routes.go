@@ -2,10 +2,12 @@ package routes
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/etec-programacion-3/2025-first-backend-Ironowl1907/db"
 	"github.com/etec-programacion-3/2025-first-backend-Ironowl1907/models"
+	"github.com/gorilla/mux"
 )
 
 func GetBooksHandler(w http.ResponseWriter, r *http.Request) {
@@ -15,7 +17,16 @@ func GetBooksHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 func GetBookHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("GetBookHandler"))
+	params := mux.Vars(r)
+	var book models.Book
+	fmt.Println(params)
+	db.DB.First(&book, params["id"])
+	if book.ID == 0 {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte("User not found"))
+	}
+	json.NewEncoder(w).Encode(book)
+
 }
 
 func PostBookHandler(w http.ResponseWriter, r *http.Request) {
