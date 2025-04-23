@@ -18,9 +18,9 @@ func GetBookHandler(w http.ResponseWriter, r *http.Request) {
 func PostBookHandler(w http.ResponseWriter, r *http.Request) {
 	var book models.Book
 	json.NewDecoder(r.Body).Decode(&book)
-	createdUser := db.DB.Create(&book)
+	createdBook := db.DB.Create(&book)
 
-	err := createdUser.Error
+	err := createdBook.Error
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest) // code 400
 		w.Write([]byte(err.Error()))
