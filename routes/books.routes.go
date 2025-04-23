@@ -87,15 +87,21 @@ func DeleteBookHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetSearchBookHandler(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r)
+	// Get name from URL parameters
+	vars := mux.Vars(r)
+	title := vars["titulo"]
+	author := vars["autor"]
+	category := vars["categoria"]
+
+	// Query the user by name
 	var book models.Book
-	fmt.Println(params)
-	db.DB.First(&book, params["id"])
-	if book.ID == 0 {
-		w.WriteHeader(http.StatusNotFound)
-		w.Write([]byte("User not found"))
+	result := db.DB.Where("titulo = ? AND autor = ? AND categoria = ?", title, author, category).First(&book)
+	if result.Error != nil {
+		http.Error(w, "Not found", http.StatusNotFound)
 		return
 	}
-	json.NewEncoder(w).Encode(book)
 
+	// Return user data
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(book)
 }
