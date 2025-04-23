@@ -26,7 +26,7 @@ func GetBookHandler(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("User not found"))
 		return
 	}
-	json.NewEncoder(w).Encode(book)
+	json.NewEncoder(w).Encode(&book)
 
 }
 
@@ -45,7 +45,29 @@ func PostBookHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func PutBookHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("PutBookHandler"))
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	var existingBook models.Book
+	if result := db.DB.First(&existingBook, id); result.Error != nil {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte("Book not found!"))
+		return
+	}
+
+	var updatedBook models.Book
+	if err := json.NewDecoder(r.Body).Decode(&updatedBook); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("Invalid request payload"))
+		return
+	}
+
+	updatedBook.ID = existingBook.ID
+
+	db.DB.Save(&updatedBook)
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(updatedBook)
 }
 
 func DeleteBookHandler(w http.ResponseWriter, r *http.Request) {
@@ -65,5 +87,15 @@ func DeleteBookHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetSearchBookHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("GetSearchBooksHandler"))
+	params := mux.Vars(r)
+	var book models.Book
+	fmt.Println(params)
+	db.DB.First(&book, params["id"])
+	if book.ID == 0 {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte("User not found"))
+		return
+	}
+	json.NewEncoder(w).Encode(book)
+
 }
