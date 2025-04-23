@@ -24,6 +24,7 @@ func GetBookHandler(w http.ResponseWriter, r *http.Request) {
 	if book.ID == 0 {
 		w.WriteHeader(http.StatusNotFound)
 		w.Write([]byte("User not found"))
+		return
 	}
 	json.NewEncoder(w).Encode(book)
 
