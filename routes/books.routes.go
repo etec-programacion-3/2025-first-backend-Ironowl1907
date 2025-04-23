@@ -9,7 +9,10 @@ import (
 )
 
 func GetBooksHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("GetBooksHandler"))
+	var books []models.Book
+	db.DB.Find(&books)
+	json.NewEncoder(w).Encode(&books)
+
 }
 func GetBookHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("GetBookHandler"))
